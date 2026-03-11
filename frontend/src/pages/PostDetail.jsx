@@ -13,7 +13,8 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/posts/${id}`);
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                const { data } = await axios.get(`${apiUrl}/api/posts/${id}`);
                 setPost(data);
                 setLoading(false);
             } catch (err) {
