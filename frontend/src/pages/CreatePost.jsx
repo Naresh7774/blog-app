@@ -18,8 +18,8 @@ const CreatePost = ({ isEdit = false }) => {
         if (isEdit && id) {
             const fetchPost = async () => {
                 try {
-                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                    const { data } = await axios.get(`${apiUrl}/api/posts/${id}`);
+                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                    const { data } = await axios.get(`${API_URL}/api/posts/${id}`);
                     setFormData({ title: data.title, content: data.content });
                     setLoading(false);
                 } catch (err) {
@@ -40,13 +40,12 @@ const CreatePost = ({ isEdit = false }) => {
         e.preventDefault();
         try {
             if (isEdit) {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                await axios.put(`${apiUrl}/api/posts/${id}`, formData, {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                await axios.put(`${API_URL}/api/posts/${id}`, formData, {
                     headers: getAuthHeader()
                 });
             } else {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                await axios.post(`${apiUrl}/api/posts`, formData, {
+                await axios.post(`${API_URL}/api/posts`, formData, {
                     headers: getAuthHeader()
                 });
             }

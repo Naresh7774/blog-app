@@ -10,8 +10,8 @@ const Home = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                const { data } = await axios.get(`${apiUrl}/api/posts`);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                const { data } = await axios.get(`${API_URL}/api/posts`);
                 setPosts(data);
                 setLoading(false);
             } catch (err) {

@@ -19,8 +19,8 @@ const Login = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            const { data } = await axios.post(`${apiUrl}/api/auth/login`, { email, password });
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const { data } = await axios.post(`${API_URL}/api/auth/login`, { email, password });
             login(data);
             navigate('/');
         } catch (err) {

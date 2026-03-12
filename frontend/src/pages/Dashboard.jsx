@@ -13,8 +13,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchMyPosts = async () => {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                const { data } = await axios.get(`${apiUrl}/api/posts`);
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            const { data } = await axios.get(`${API_URL}/api/posts`);
                 // Filter posts to only show the user's posts
                 const myPosts = data.filter(post => post.author._id === user._id);
                 setPosts(myPosts);
@@ -31,8 +31,8 @@ const Dashboard = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
             try {
-                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                await axios.delete(`${apiUrl}/api/posts/${id}`, {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+            await axios.delete(`${API_URL}/api/posts/${id}`, {
                     headers: getAuthHeader()
                 });
                 setPosts(posts.filter(post => post._id !== id));
