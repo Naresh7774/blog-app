@@ -1,6 +1,6 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://blog-app-d7ol.onrender.com';
 
 console.log('Current API URL:', API_URL);
 if (!import.meta.env.VITE_API_URL) {
-    console.warn('VITE_API_URL is not defined! Falling back to localhost:5000');
+    console.log('Using default production API URL: https://blog-app-d7ol.onrender.com');
 }
