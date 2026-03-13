@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
 import { API_URL } from '../config';
