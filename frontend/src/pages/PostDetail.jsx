@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const PostDetail = () => {
     const [post, setPost] = useState(null);
@@ -13,7 +12,6 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 const { data } = await axios.get(`${API_URL}/api/posts/${id}`);
                 setPost(data);
                 setLoading(false);

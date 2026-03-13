@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
 import PostCard from '../components/PostCard';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const Dashboard = () => {
     const [posts, setPosts] = useState([]);
@@ -14,7 +14,6 @@ const Dashboard = () => {
 
         const fetchPosts = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 const { data } = await axios.get(`${API_URL}/api/posts`);
                 if (isMounted) {
                     setPosts(data);
@@ -42,7 +41,6 @@ const Dashboard = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 await axios.delete(`${API_URL}/api/posts/${id}`);
                 setPosts(posts.filter(post => post._id !== id));
             } catch (err) {

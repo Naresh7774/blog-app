@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const CreatePost = ({ isEdit = false }) => {
     const [formData, setFormData] = useState({ title: '', content: '' });
@@ -15,7 +16,6 @@ const CreatePost = ({ isEdit = false }) => {
         if (isEdit && id) {
             const fetchPost = async () => {
                 try {
-                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                     const { data } = await axios.get(`${API_URL}/api/posts/${id}`);
                     setFormData({ title: data.title, content: data.content });
                     setLoading(false);
@@ -37,10 +37,8 @@ const CreatePost = ({ isEdit = false }) => {
         e.preventDefault();
         try {
             if (isEdit) {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 await axios.put(`${API_URL}/api/posts/${id}`, formData);
             } else {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 await axios.post(`${API_URL}/api/posts`, formData);
             }
             navigate('/');
