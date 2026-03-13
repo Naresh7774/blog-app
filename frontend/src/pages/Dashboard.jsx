@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
 import { Link } from 'react-router-dom';
 
@@ -8,33 +7,43 @@ const Dashboard = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const { user, getAuthHeader } = useContext(AuthContext);
 
     useEffect(() => {
-        const fetchMyPosts = async () => {
+        let isMounted = true;
+        let retryCount = 0;
+
+        const fetchPosts = async () => {
             try {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            const { data } = await axios.get(`${API_URL}/api/posts`);
-                // Filter posts to only show the user's posts
-                const myPosts = data.filter(post => post.author._id === user._id);
-                setPosts(myPosts);
-                setLoading(false);
+                const { data } = await axios.get(`${API_URL}/api/posts`);
+                if (isMounted) {
+                    setPosts(data);
+                    setLoading(false);
+                    setError('');
+                }
             } catch (err) {
-                setError(err.response?.data?.message || err.message);
-                setLoading(false);
+                if (isMounted) {
+                    retryCount++;
+                    if (retryCount < 12) {
+                        setError('Backend is waking up... Please wait.');
+                        setTimeout(fetchPosts, 5000);
+                    } else {
+                        setError('Failed to connect to the backend. Please refresh.');
+                        setLoading(false);
+                    }
+                }
             }
         };
 
-        fetchMyPosts();
-    }, [user]);
+        fetchPosts();
+        return () => { isMounted = false; };
+    }, []);
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
             try {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            await axios.delete(`${API_URL}/api/posts/${id}`, {
-                    headers: getAuthHeader()
-                });
+                await axios.delete(`${API_URL}/api/posts/${id}`);
                 setPosts(posts.filter(post => post._id !== id));
             } catch (err) {
                 alert(err.response?.data?.message || err.message);
@@ -53,7 +62,7 @@ const Dashboard = () => {
             </div>
 
             <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-                Welcome {user.username}! Here you can manage your blog posts.
+                Manage all blog posts from here.
             </p>
 
             <div style={{

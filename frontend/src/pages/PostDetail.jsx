@@ -49,22 +49,7 @@ const PostDetail = () => {
                         {post.title}
                     </h1>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)' }}>
-                        <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '50%',
-                            backgroundColor: 'var(--primary)',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 'bold',
-                            fontSize: '1.2rem'
-                        }}>
-                            {post.author.username.charAt(0).toUpperCase()}
-                        </div>
                         <div>
-                            <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{post.author.username}</div>
                             <div style={{ fontSize: '0.875rem' }}>{formattedDate}</div>
                         </div>
                     </div>

@@ -1,7 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
 
 const CreatePost = ({ isEdit = false }) => {
     const [formData, setFormData] = useState({ title: '', content: '' });
@@ -10,7 +8,6 @@ const CreatePost = ({ isEdit = false }) => {
 
     const navigate = useNavigate();
     const { id } = useParams();
-    const { getAuthHeader } = useContext(AuthContext);
 
     const { title, content } = formData;
 
@@ -41,15 +38,12 @@ const CreatePost = ({ isEdit = false }) => {
         try {
             if (isEdit) {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-                await axios.put(`${API_URL}/api/posts/${id}`, formData, {
-                    headers: getAuthHeader()
-                });
+                await axios.put(`${API_URL}/api/posts/${id}`, formData);
             } else {
-                await axios.post(`${API_URL}/api/posts`, formData, {
-                    headers: getAuthHeader()
-                });
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+                await axios.post(`${API_URL}/api/posts`, formData);
             }
-            navigate('/dashboard');
+            navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || err.message);
         }

@@ -8,19 +8,38 @@ const Home = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        let isMounted = true;
+        let retryCount = 0;
+
         const fetchPosts = async () => {
             try {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
                 const { data } = await axios.get(`${API_URL}/api/posts`);
-                setPosts(data);
-                setLoading(false);
+                if (isMounted) {
+                    setPosts(data);
+                    setLoading(false);
+                    setError('');
+                }
             } catch (err) {
-                setError(err.response?.data?.message || err.message);
-                setLoading(false);
+                if (isMounted) {
+                    // Render's free tier can take up to 60s to wake up. 
+                    // If we get a network error or timeout, we'll keep retrying.
+                    console.log(`Backend attempt ${retryCount + 1} failed, retrying...`);
+                    retryCount++;
+                    
+                    if (retryCount < 12) { // Try for about 1 minute (12 * 5s)
+                        setError('Backend is waking up... Please wait, this can take up to a minute on the free tier.');
+                        setTimeout(fetchPosts, 5000);
+                    } else {
+                        setError('Failed to connect to the backend. Please refresh the page.');
+                        setLoading(false);
+                    }
+                }
             }
         };
 
         fetchPosts();
+        return () => { isMounted = false; };
     }, []);
 
     if (loading) return <div className="text-center mt-4">Loading posts...</div>;
